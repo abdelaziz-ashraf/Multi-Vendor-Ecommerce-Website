@@ -21,6 +21,8 @@
 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
+    <link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
+
     <!-- Start GA -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
     <script>
@@ -80,6 +82,8 @@
 <script src="{{ asset('backend/assets/js/scripts.js') }}"></script>
 <script src="{{ asset('backend/assets/js/custom.js') }}"></script>
 
+<script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 <script>
@@ -89,6 +93,6 @@
     @endforeach
     @endif
 </script>
-
+@stack('scripts')
 </body>
 </html>
