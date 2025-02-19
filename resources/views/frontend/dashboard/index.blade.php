@@ -2,6 +2,8 @@
 
 @section('content')
 
+    @include('frontend.dashboard.layouts.nav')
+
     <div class="row">
         <div class="col-xl-12">
             <div class="wsus__message">
