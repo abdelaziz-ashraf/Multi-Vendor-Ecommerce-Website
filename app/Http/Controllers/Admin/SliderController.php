@@ -44,6 +44,5 @@ class SliderController extends Controller
         $this->deleteOldImageIfExists($slider->banner);
         toastr()->success('Banner deleted successfully.');
         return redirect()->back();
-        // todo: problem: after return the frontend not load the non-deleted records
     }
 }

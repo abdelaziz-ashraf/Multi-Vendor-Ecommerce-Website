@@ -59,7 +59,6 @@ class CategoryController extends Controller
         $category->delete();
         toastr()->success('Category deleted successfully.');
         return redirect()->route('admin.categories.index');
-        // todo: same problem when return not load the data
     }
 
     public function changeStatus(Request $request, Category $category)
