@@ -18,18 +18,7 @@ class ProfileController extends Controller
     public function update(UpdateProfileRequest $request) {
         $user = auth()->user();
         $data = $request->validated();
-
-        if($request->hasFile('image')) {
-            $image = $request->file('image');
-            $filename = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('uploads/vendors/'), $filename);
-            $data['image'] = 'uploads/vendors/' . $filename;
-
-            if(File::exists(public_path($user->image))) {
-                File::delete(public_path($user->image));
-            }
-        }
-
+        $data['image'] = $this->uploadImage($request, 'image', 'uploads/vendors', $user->image);
         $user->update($data);
         toastr()->success('Profile Updated Successfully');
         return redirect()->back();
