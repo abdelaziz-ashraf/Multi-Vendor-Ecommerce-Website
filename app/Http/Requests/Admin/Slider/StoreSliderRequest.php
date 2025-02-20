@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Admin\Banner;
+namespace App\Http\Requests\Admin\Slider;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreBannerRequest extends FormRequest
+class StoreSliderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

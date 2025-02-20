@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\SliderDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Banner\StoreBannerRequest;
+use App\Http\Requests\Admin\Slider\StoreSliderRequest;
 use App\Http\Requests\Admin\Slider\UpdateSiderRequest;
 use App\Models\Slider;
-use Illuminate\Http\Request;
 
 class SliderController extends Controller
 {
@@ -20,16 +19,12 @@ class SliderController extends Controller
         return view('admin.slider.create');
     }
 
-    public function store(StoreBannerRequest $request) {
+    public function store(StoreSliderRequest $request) {
         $data = $request->validated();
         $data['banner'] = $this->uploadImage($request, 'banner', 'uploads/frontend/slider');
         Slider::create($data);
         toastr()->success('Banner added successfully.');
         return redirect()->back();
-    }
-
-    public function show(Slider $slider) {
-
     }
 
     public function edit(Slider $slider) {
