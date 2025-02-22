@@ -56,6 +56,10 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
+        if($category->subCategories()->count() > 0){
+            toastr()->error('Delete Sub Categories First.');
+            return redirect()->route('admin.categories.index');
+        }
         $category->delete();
         toastr()->success('Category deleted successfully.');
         return redirect()->route('admin.categories.index');
