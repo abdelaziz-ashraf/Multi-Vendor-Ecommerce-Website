@@ -12,13 +12,13 @@ trait ImageHandler
             $image = $request->file($inputName);
             $newName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path($path), $newName);
-            $this->deleteOldImageIfExists($oldImage);
+            $this->deleteImageIfExists($oldImage);
             return ($path . '/' . $newName);
         }
         return null;
     }
 
-    public function deleteOldImageIfExists($image) {
+    public function deleteImageIfExists($image) {
         if($image && File::exists(public_path($image))) {
             File::delete(public_path($image));
         }

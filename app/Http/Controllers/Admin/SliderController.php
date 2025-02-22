@@ -41,7 +41,7 @@ class SliderController extends Controller
 
     public function destroy(Slider $slider) {
         $slider->delete();
-        $this->deleteOldImageIfExists($slider->banner);
+        $this->deleteImageIfExists($slider->banner);
         toastr()->success('Banner deleted successfully.');
         return redirect()->back();
     }

@@ -28,6 +28,13 @@
                 </ul>
             </li>
 
+            <li class="dropdown {{ setSidebarActive(['admin.brands.*']) }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Mange Product</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ setSidebarActive(['admin.brands.*']) }}"><a class="nav-link" href="{{ route('admin.brands.index') }}">Brands</a></li>
+                </ul>
+            </li>
+
 {{--            <li class="menu-header">Starter</li>--}}
 {{--            <li class="dropdown">--}}
 {{--                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Layout</span></a>--}}

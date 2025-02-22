@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ChildCategoryController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -31,4 +32,6 @@ Route::prefix('admin')->as('admin.')
         Route::put('child-categories/{child_category}/status', [ChildCategoryController::class, 'changeStatus']);
         Route::resource('child-categories', ChildCategoryController::class)->except('show');
 
+        Route::put('brands/{brand}/status', [BrandController::class, 'changeStatus']);
+        Route::resource('brands', BrandController::class);
     });
