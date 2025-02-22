@@ -63,7 +63,16 @@ class SubCategoryController extends Controller
 
     public function changeStatus(Request $request, SubCategory $sub_category)
     {
-        // todo : not work
-        dd($sub_category);
+        $sub_category->update([
+            'status' => $request->status == "true" ? "active" : "inactive"
+        ]);
+        return response()->json(['success' => 'Status updated successfully.']);
+    }
+
+    public function getSubCategories(Request $request)
+    {
+        $subCategory = SubCategory::where('id', $request->id)
+                ->where('status', 'active')->get();
+        return response()->json($subCategory);
     }
 }

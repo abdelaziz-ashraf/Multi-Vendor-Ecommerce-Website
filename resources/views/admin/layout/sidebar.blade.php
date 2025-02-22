@@ -18,6 +18,7 @@
                 <ul class="dropdown-menu">
                     <li><a class="nav-link" href="{{ route('admin.categories.index') }}">Category</a></li>
                     <li><a class="nav-link" href="{{ route('admin.sub-categories.index') }}">Sub Categories</a></li>
+                    <li><a class="nav-link" href="{{ route('admin.child-categories.index') }}">Child Categories</a></li>
                 </ul>
             </li>
             <li class="dropdown">
