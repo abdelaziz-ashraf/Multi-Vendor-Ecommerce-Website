@@ -13,18 +13,18 @@
             </li>
 
             <li class="menu-header">Starter</li>
-            <li class="dropdown">
+            <li class="dropdown {{ setSidebarActive(['admin.categories.*', 'admin.sub-categories*', 'admin.child-categories.*']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Mange Categories</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{{ route('admin.categories.index') }}">Category</a></li>
-                    <li><a class="nav-link" href="{{ route('admin.sub-categories.index') }}">Sub Categories</a></li>
-                    <li><a class="nav-link" href="{{ route('admin.child-categories.index') }}">Child Categories</a></li>
+                    <li class="{{ setSidebarActive(['admin.categories.*']) }}"><a class="nav-link" href="{{ route('admin.categories.index') }}">Category</a></li>
+                    <li class="{{ setSidebarActive(['admin.sub-categories.*']) }}"><a class="nav-link" href="{{ route('admin.sub-categories.index') }}">Sub Categories</a></li>
+                    <li class="{{ setSidebarActive(['admin.child-categories.*']) }}" ><a class="nav-link" href="{{ route('admin.child-categories.index') }}">Child Categories</a></li>
                 </ul>
             </li>
-            <li class="dropdown">
+            <li class="dropdown {{ setSidebarActive(['admin.slider.*']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-columns"></i> <span>Mange Website</span></a>
                 <ul class="dropdown-menu">
-                    <li><a class="nav-link" href="{{ route('admin.slider.index') }}">Slider</a></li>
+                    <li class="{{ setSidebarActive(['admin.slider.*']) }}"><a class="nav-link" href="{{ route('admin.slider.index') }}">Slider</a></li>
                 </ul>
             </li>
 
