@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ProfileController;
 use App\Http\Controllers\VendorController;
+use App\Models\SubCategory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('vendor')->as('vendor.')
@@ -11,4 +14,19 @@ Route::prefix('vendor')->as('vendor.')
     Route::get('profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('profile/password', [ProfileController::class, 'changePassword'])->name('password.update');
-});
+
+        Route::get('subcategories', function (Request $request) {
+            $subcategories = SubCategory::where('category_id', $request->get('id'))
+                ->where('status', 'active')->get();
+            return response()->json($subcategories);
+        })->name('get_subcategories');
+
+        Route::get('categories/childcategories', function (Request $request) {
+            $childcategories = \App\Models\ChildCategory::where('sub_category_id', $request->get('id'))
+                ->where('status', 'active')->get();
+            return response()->json($childcategories);
+        })->name('childcategories');
+
+        Route::put('products/{product}/status', [ProductController::class, 'changeStatus'])->name('products.status');
+        Route::resource('products', ProductController::class);
+    });

@@ -53,22 +53,12 @@
 <section id="wsus__dashboard">
     <div class="container-fluid">
 
-        @include('vendor.dashboard.layouts.sidebar')
+        @include('vendor.layouts.sidebar')
 
         <div class="row">
-            <div class="col-xl-9 col-xxl-10 col-lg-9 ms-auto">
-                <div class="dashboard_content">
 
-                    <div class="wsus__dashboard">
+            @yield('content')
 
-                        @include('vendor.dashboard.layouts.nav')
-
-                        @yield('content')
-
-                    </div>
-
-                </div>
-            </div>
         </div>
     </div>
 </section>
@@ -126,6 +116,7 @@
 <!--main/custom js-->
 <script src="{{ asset('frontend/assets/js/main.js') }}"></script>
 
+<link rel="stylesheet" href="//cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
 
 <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
@@ -136,6 +127,9 @@
     @endforeach
     @endif
 </script>
+
+<script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script>
+@stack('scripts')
 
 </body>
 
