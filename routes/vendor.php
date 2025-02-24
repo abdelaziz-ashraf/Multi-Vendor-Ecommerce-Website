@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Vendor\ProductController;
+use App\Http\Controllers\Vendor\ProductImageGalleryController;
 use App\Http\Controllers\Vendor\ProfileController;
 use App\Http\Controllers\VendorController;
 use App\Models\SubCategory;
@@ -28,5 +29,6 @@ Route::prefix('vendor')->as('vendor.')
         })->name('childcategories');
 
         Route::put('products/{product}/status', [ProductController::class, 'changeStatus'])->name('products.status');
+        Route::resource('products/image-gallery', ProductImageGalleryController::class)->only('index', 'store', 'destroy');
         Route::resource('products', ProductController::class);
     });

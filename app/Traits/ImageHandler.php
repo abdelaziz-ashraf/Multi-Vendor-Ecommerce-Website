@@ -18,6 +18,21 @@ trait ImageHandler
         return null;
     }
 
+    public function uploadMultiImage($request, $inputName, $path) {
+        $paths = [];
+        if($request->hasFile($inputName)) {
+            $images = $request->{$inputName};
+
+            foreach ($images as $image) {
+                $newName = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path($path), $newName);
+                $paths[] = $path . '/' . $newName;
+            }
+
+            return $paths;
+        }
+    }
+
     public function deleteImageIfExists($image) {
         if($image && File::exists(public_path($image))) {
             File::delete(public_path($image));

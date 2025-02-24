@@ -25,7 +25,18 @@ class ProductDataTable extends DataTable
             ->addColumn('action', function ($query) {
                 $editButton = "<a href='".route('vendor.products.edit', $query->id)."' class='btn btn-primary mr-2'> Edit </a>";
                 $deleteButton = "<form method='POST' action='".route('vendor.products.destroy', $query->id)."'> " . csrf_field() . method_field("DELETE") . " <button type='submit' class='btn btn-danger'> Delete </button> </form>";
-                $buttons = "<div class='d-flex'> ". $editButton . $deleteButton." </div>";
+                $more = '<div class="btn-group dropstart">
+                              <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                              aria-expanded="false">
+                                More
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="'. route('vendor.image-gallery.index', ['product' => $query->id]) .'">IMage Gallery</a></li>
+                                <li><a class="dropdown-item" href="#">-------</a></li>
+                                <li><a class="dropdown-item" href="#">-------</a></li>
+                              </ul>
+                        </div>';
+                $buttons = "<div class='d-flex'> ". $editButton . $deleteButton. $more." </div>";
                 return $buttons;
             })
             ->addColumn('status', function ($query) {
