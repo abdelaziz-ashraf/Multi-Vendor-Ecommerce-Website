@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\DataTables\ProductDataTable;
+use App\DataTables\Vendor\ProductDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Vendor\Product\StoreProductRequest;
 use App\Http\Requests\Vendor\Product\UpdateProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;

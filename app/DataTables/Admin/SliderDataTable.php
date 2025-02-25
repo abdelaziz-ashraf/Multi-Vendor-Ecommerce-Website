@@ -1,18 +1,16 @@
 <?php
 
-namespace App\DataTables;
+namespace App\DataTables\Admin;
 
-use App\Models\ChildCategory;
+use App\Models\Slider;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class ChildCategoryDataTable extends DataTable
+class SliderDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,32 +21,26 @@ class ChildCategoryDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
-                $editButton = "<a href='".route('admin.child-categories.edit', $query->id)."' class='btn btn-primary mr-2'> Edit </a>";
-                $deleteButton = "<form method='POST' action='".route('admin.child-categories.destroy', $query->id)."'> " . csrf_field() . method_field("DELETE") . " <button type='submit' class='btn btn-danger'> Delete </button> </form>";
+                $editButton = "<a href='".route('admin.slider.edit', $query->id)."' class='btn btn-primary mr-2'> Edit </a>";
+                $deleteButton = "<form method='POST' action='".route('admin.slider.destroy', $query->id)."'> " . csrf_field() . method_field("DELETE") . " <button type='submit' class='btn btn-danger'> Delete </button> </form>";
                 $buttons = "<div class='d-flex'> ". $editButton . $deleteButton." </div>";
                 return $buttons;
             })
-            ->addColumn('main_category', function ($subcategory) {
-                return $subcategory->category->name;
-            })
-            ->addColumn('sub_category', function ($subcategory) {
-                return $subcategory->sub_category->name;
+            ->addColumn('banner', function ($banner) {
+                return "<img width='80px' src='".asset($banner->banner)."' alt='".$banner->title."'>";
             })
             ->addColumn('status', function ($query) {
-                $checked = $query->status == "active" ? "checked" : "";
-                return '<label class="custom-switch">
-                            <input type="checkbox" class="custom-switch-input status-switch" data-id="' . $query->id . '" ' . $checked . '>
-                            <span class="custom-switch-indicator"></span>
-                        </label>';
+                $color = ($query->status == "active" ? "bg-success" : "bg-danger");
+                return '<td> <span class="badge ' . $color . '">' . $query->status . '</span> </td>';
             })
-            ->rawColumns(['action', 'status'])
+            ->rawColumns(['action', 'banner', 'status'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(ChildCategory $model): QueryBuilder
+    public function query(Slider $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -59,11 +51,11 @@ class ChildCategoryDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('childcategory-table')
+                    ->setTableId('slider-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy(0)
+                    ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'),
@@ -82,9 +74,9 @@ class ChildCategoryDataTable extends DataTable
     {
         return [
             Column::make('id')->addClass('text-center'),
-            Column::make('name')->addClass('text-center'),
-            Column::make('main_category')->addClass('text-center'),
-            Column::make('sub_category')->addClass('text-center'),
+            Column::make('banner'),
+            Column::make('title')->addClass('text-center'),
+            Column::make('type')->addClass('text-center'),
             Column::make('status')->addClass('text-center'),
             Column::computed('action')
                 ->exportable(false)
@@ -99,6 +91,6 @@ class ChildCategoryDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'ChildCategory_' . date('YmdHis');
+        return 'Slider_' . date('YmdHis');
     }
 }

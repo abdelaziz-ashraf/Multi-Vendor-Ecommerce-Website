@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\DataTables\ProductVariantDataTable;
+use App\DataTables\Vendor\ProductVariantDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Vendor\Product\StoreVariant;
 use App\Http\Requests\Vendor\Product\UpdateVariant;

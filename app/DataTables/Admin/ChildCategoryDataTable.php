@@ -1,18 +1,16 @@
 <?php
 
-namespace App\DataTables;
+namespace App\DataTables\Admin;
 
-use App\Models\Brand;
+use App\Models\ChildCategory;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class BrandDataTable extends DataTable
+class ChildCategoryDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,10 +21,16 @@ class BrandDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
-                $editButton = "<a href='".route('admin.brands.edit', $query->id)."' class='btn btn-primary mr-2'> Edit </a>";
-                $deleteButton = "<form method='POST' action='".route('admin.brands.destroy', $query->id)."'> " . csrf_field() . method_field("DELETE") . " <button type='submit' class='btn btn-danger'> Delete </button> </form>";
+                $editButton = "<a href='".route('admin.child-categories.edit', $query->id)."' class='btn btn-primary mr-2'> Edit </a>";
+                $deleteButton = "<form method='POST' action='".route('admin.child-categories.destroy', $query->id)."'> " . csrf_field() . method_field("DELETE") . " <button type='submit' class='btn btn-danger'> Delete </button> </form>";
                 $buttons = "<div class='d-flex'> ". $editButton . $deleteButton." </div>";
                 return $buttons;
+            })
+            ->addColumn('main_category', function ($subcategory) {
+                return $subcategory->category->name;
+            })
+            ->addColumn('sub_category', function ($subcategory) {
+                return $subcategory->sub_category->name;
             })
             ->addColumn('status', function ($query) {
                 $checked = $query->status == "active" ? "checked" : "";
@@ -35,22 +39,14 @@ class BrandDataTable extends DataTable
                             <span class="custom-switch-indicator"></span>
                         </label>';
             })
-            ->addColumn('is_featured', function ($query) {
-                $color = ($query->is_featured == "1" ? "bg-success" : "bg-danger");
-                $featured = ($query->is_featured == "1" ? "YES" : "NO");
-                return '<td> <span class="badge ' . $color . '">' . $featured . '</span> </td>';
-            })
-            ->addColumn('logo', function ($query) {
-                return "<img width='80px' src='".asset($query->logo)."' alt='".$query->name."'>";
-            })
-            ->rawColumns(['action', 'status', 'is_featured', 'logo'])
+            ->rawColumns(['action', 'status'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Brand $model): QueryBuilder
+    public function query(ChildCategory $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -61,7 +57,7 @@ class BrandDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('brand-table')
+                    ->setTableId('childcategory-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -82,20 +78,17 @@ class BrandDataTable extends DataTable
      */
     public function getColumns(): array
     {
-
-
         return [
             Column::make('id')->addClass('text-center'),
-            Column::make('logo')->addClass('text-center'),
             Column::make('name')->addClass('text-center'),
-            Column::make('is_featured')->addClass('text-center'),
+            Column::make('main_category')->addClass('text-center'),
+            Column::make('sub_category')->addClass('text-center'),
             Column::make('status')->addClass('text-center'),
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-
+                ->exportable(false)
+                ->printable(false)
+                ->width(60)
+                ->addClass('text-center'),
         ];
     }
 
@@ -104,6 +97,6 @@ class BrandDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Brand_' . date('YmdHis');
+        return 'ChildCategory_' . date('YmdHis');
     }
 }

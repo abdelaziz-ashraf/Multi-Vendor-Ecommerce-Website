@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DataTables\ChildCategoryDataTable;
+use App\DataTables\Admin\ChildCategoryDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ChildCategory\StoreChildCategoryRequest;
 use App\Http\Requests\Admin\ChildCategory\UpdateChildCategoryRequest;

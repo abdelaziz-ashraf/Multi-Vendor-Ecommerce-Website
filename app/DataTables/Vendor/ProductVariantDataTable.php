@@ -1,18 +1,16 @@
 <?php
 
-namespace App\DataTables;
+namespace App\DataTables\Vendor;
 
-use App\Models\SubCategory;
+use App\Models\ProductVariant;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class SubCategoryDataTable extends DataTable
+class ProductVariantDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -22,21 +20,19 @@ class SubCategoryDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('action', function ($query) {
-                $editButton = "<a href='".route('admin.sub-categories.edit', $query->id)."' class='btn btn-primary mr-2'> Edit </a>";
-                $deleteButton = "<form method='POST' action='".route('admin.sub-categories.destroy', $query->id)."'> " . csrf_field() . method_field("DELETE") . " <button type='submit' class='btn btn-danger'> Delete </button> </form>";
-                $buttons = "<div class='d-flex'> ". $editButton . $deleteButton." </div>";
-                return $buttons;
-            })
-            ->addColumn('main_category', function ($subcategory) {
-                return $subcategory->category->name;
-            })
             ->addColumn('status', function ($query) {
                 $checked = $query->status == "active" ? "checked" : "";
                 return '<label class="custom-switch">
                             <input type="checkbox" class="custom-switch-input status-switch" data-id="' . $query->id . '" ' . $checked . '>
                             <span class="custom-switch-indicator"></span>
                         </label>';
+            })
+            ->addColumn('action', function ($query) {
+                $variantItem = "<a href='#' class='btn btn-outline-info mr-2'> Items </a>";
+                $editButton = "<a href='".route('vendor.products-variants.edit', $query->id)."' class='btn btn-primary mr-2'> Edit </a>";
+                $deleteButton = "<form method='POST' action='".route('vendor.products-variants.destroy', $query->id)."'> " . csrf_field() . method_field("DELETE") . " <button type='submit' class='btn btn-danger'> Delete </button> </form>";
+                $buttons = "<div class='d-flex'> ". $variantItem . $editButton . $deleteButton ." </div>";
+                return $buttons;
             })
             ->rawColumns(['action', 'status'])
             ->setRowId('id');
@@ -45,9 +41,9 @@ class SubCategoryDataTable extends DataTable
     /**
      * Get the query source of dataTable.
      */
-    public function query(SubCategory $model): QueryBuilder
+    public function query(ProductVariant $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->where('product_id', request()->product)->newQuery();
     }
 
     /**
@@ -56,7 +52,7 @@ class SubCategoryDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('subcategory-table')
+                    ->setTableId('productvariant-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -78,15 +74,14 @@ class SubCategoryDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->addClass('text-center'),
+            Column::make('id')->addClass('text-center')->width(100),
             Column::make('name')->addClass('text-center'),
-            Column::make('main_category')->addClass('text-center'),
             Column::make('status')->addClass('text-center'),
             Column::computed('action')
-                ->exportable(false)
-                ->printable(false)
-                ->width(60)
-                ->addClass('text-center'),
+                  ->exportable(false)
+                  ->printable(false)
+                  ->width(60)
+                  ->addClass('text-center'),
         ];
     }
 
@@ -95,6 +90,6 @@ class SubCategoryDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'SubCategory_' . date('YmdHis');
+        return 'ProductVariant_' . date('YmdHis');
     }
 }

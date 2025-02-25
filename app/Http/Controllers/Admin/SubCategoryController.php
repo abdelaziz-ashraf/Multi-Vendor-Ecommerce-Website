@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DataTables\SubCategoryDataTable;
+use App\DataTables\Admin\SubCategoryDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SubCategory\StoreSubCategoryRequest;
 use App\Http\Requests\Admin\SubCategory\UpdateSubCategoryRequest;

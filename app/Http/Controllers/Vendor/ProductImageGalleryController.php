@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\DataTables\ProductImageGalleryDataTable;
+use App\DataTables\Vendor\ProductImageGalleryDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Vendor\Product\StoreProductImageGalleryRequest;
 use App\Models\Product;
