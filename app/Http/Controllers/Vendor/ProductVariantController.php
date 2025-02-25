@@ -15,6 +15,9 @@ class ProductVariantController extends Controller
     public function index(Request $request, ProductVariantDataTable $dataTable)
     {
         $product = Product::where('id', $request->product)->first();
+        if($product->vendor_id != auth()->id()){
+            abort(404);
+        }
         return $dataTable->render('vendor.product.variant.index', compact('product'));
     }
 
@@ -31,16 +34,29 @@ class ProductVariantController extends Controller
     }
 
     public function edit(ProductVariant $products_variant) {
+        if($products_variant->product->vendor_id != auth()->id()){
+            abort(404);
+        }
         return view('vendor.product.variant.edit', compact('products_variant'));
     }
 
     public function update(UpdateVariant $request, ProductVariant $products_variant) {
+        if($products_variant->product->vendor_id != auth()->id()){
+            abort(404);
+        }
         $products_variant->update($request->validated());
         toastr()->success('Product variant updated successfully.');
         return redirect()->route('vendor.products-variants.index', ['product' => $products_variant->product_id]);
     }
 
     public function destroy(ProductVariant $products_variant) {
+        if($products_variant->product->vendor_id != auth()->id()){
+            abort(404);
+        }
+        if(count($products_variant->variantItems)) {
+            toastr()->error('Delete Product Variant Items First.');
+            return redirect()->route('vendor.products-variants.index', ['product' => $products_variant->product]);
+        }
         $products_variant->delete();
         toastr()->success('Product variant deleted successfully.');
         return redirect()->route('vendor.products-variants.index', ['product' => $products_variant->product]);

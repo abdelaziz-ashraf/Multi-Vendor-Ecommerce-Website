@@ -1,5 +1,5 @@
 <?php
-
+// todo: Admin approve/reject product
 namespace App\Http\Controllers\Vendor;
 
 use App\DataTables\Vendor\ProductDataTable;
@@ -57,6 +57,16 @@ class ProductController extends Controller
     public function destroy(Product $product) {
         if($product->vendor_id != auth()->id()){
             return throw ValidationException::withMessages(['authorization' => 'You can not delete this product.']);
+        }
+
+        foreach ($product->images as $image) {
+            $image->delete();
+            $this->deleteImageIfExists($image->image);
+        }
+
+        foreach ($product->variants as $variant) {
+            $variant->variantItems()->delete();
+            $variant->delete();
         }
 
         $product->delete();

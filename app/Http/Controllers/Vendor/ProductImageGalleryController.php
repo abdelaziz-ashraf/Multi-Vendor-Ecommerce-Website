@@ -8,11 +8,15 @@ use App\Http\Requests\Vendor\Product\StoreProductImageGalleryRequest;
 use App\Models\Product;
 use App\Models\ProductImageGallery;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ProductImageGalleryController extends Controller
 {
     public function index(Request $request, ProductImageGalleryDataTable $dataTable) {
         $product = Product::findOrFail($request->query('product'));
+        if($product->vendor_id != auth()->id()){
+            abort(404);
+        }
         return $dataTable->render('vendor.product.image-gallery.index', compact('product'));
     }
 
@@ -31,7 +35,9 @@ class ProductImageGalleryController extends Controller
 
     public function destroy(ProductImageGallery $image_gallery)
     {
-
+        if($image_gallery->product->vendor_id != auth()->id()){
+            abort(404);
+        }
         $image_gallery->delete();
         $this->deleteImageIfExists($image_gallery->image);
         toastr()->success('Image deleted successfully.');

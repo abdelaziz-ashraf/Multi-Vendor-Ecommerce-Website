@@ -11,7 +11,7 @@ class UpdateProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if(route('product')->vendor_id != auth()->id()){
+        if(request()->route('product')->vendor_id != auth()->id()){
             return false;
         }
         return true;

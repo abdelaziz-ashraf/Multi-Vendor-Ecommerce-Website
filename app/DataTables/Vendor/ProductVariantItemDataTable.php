@@ -2,7 +2,7 @@
 
 namespace App\DataTables\Vendor;
 
-use App\Models\ProductVariant;
+use App\Models\ProductVariantItem;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -10,7 +10,7 @@ use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
 
-class ProductVariantDataTable extends DataTable
+class ProductVariantItemDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -28,24 +28,30 @@ class ProductVariantDataTable extends DataTable
                         </label>';
             })
             ->addColumn('action', function ($query) {
-                $variantItem = "<a href='". route('vendor.product-variant-item.index', [
-                    'product' => request()->product, 'variant' => $query->id
-                    ]) ."' class='btn btn-outline-info mr-2'> Items </a>";
-                $editButton = "<a href='".route('vendor.products-variants.edit', $query->id)."' class='btn btn-primary mr-2'> Edit </a>";
-                $deleteButton = "<form method='POST' action='".route('vendor.products-variants.destroy', $query->id)."'> " . csrf_field() . method_field("DELETE") . " <button type='submit' class='btn btn-danger'> Delete </button> </form>";
-                $buttons = "<div class='d-flex'> ". $variantItem . $editButton . $deleteButton ." </div>";
+                $editButton = "<a href='".route('vendor.product-variant-item.edit', [
+                    'product' => request()->product, 'variant' => request()->variant, 'item' => $query
+                    ])."' class='btn btn-primary mr-2'> Edit </a>";
+                $deleteButton = "<form method='POST' action='".route('vendor.product-variant-item.destroy', [
+                    'product' => request()->product, 'variant' => request()->variant, 'item' => $query
+                    ])."'> " . csrf_field() . method_field("DELETE") . " <button type='submit' class='btn btn-danger'> Delete </button> </form>";
+                $buttons = "<div class='d-flex'> " . $editButton . $deleteButton ." </div>";
                 return $buttons;
             })
-            ->rawColumns(['action', 'status'])
+            ->addColumn('is_default', function ($query) {
+                $color = ($query->is_default == "1" ? "bg-success" : "bg-danger");
+                $is_default = ($query->is_default == "1" ? "Yes" : "No");
+                return '<td> <span class="badge ' . $color . '">' . $is_default . '</span> </td>';
+            })
+            ->rawColumns(['action', 'status', 'is_default'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(ProductVariant $model): QueryBuilder
+    public function query(ProductVariantItem $model): QueryBuilder
     {
-        return $model->where('product_id', request()->product)->newQuery();
+        return $model->where('variant_id', request()->variant->id)->newQuery();
     }
 
     /**
@@ -54,11 +60,11 @@ class ProductVariantDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('productvariant-table')
+                    ->setTableId('productvariantitem-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy(0)
+                    ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'),
@@ -76,9 +82,11 @@ class ProductVariantDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('id')->addClass('text-center')->width(100),
+            Column::make('id')->addClass('text-center'),
             Column::make('name')->addClass('text-center'),
-            Column::make('status')->addClass('text-center'),
+            Column::make('price')->addClass('text-center'),
+            Column::make('is_default')->addClass('text-center'),
+            Column::make('status'),
             Column::computed('action')
                   ->exportable(false)
                   ->printable(false)
@@ -92,6 +100,6 @@ class ProductVariantDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'ProductVariant_' . date('YmdHis');
+        return 'ProductVariantItem_' . date('YmdHis');
     }
 }

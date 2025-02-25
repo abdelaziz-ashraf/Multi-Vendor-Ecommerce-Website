@@ -3,6 +3,7 @@
 use App\Http\Controllers\Vendor\ProductController;
 use App\Http\Controllers\Vendor\ProductImageGalleryController;
 use App\Http\Controllers\Vendor\ProductVariantController;
+use App\Http\Controllers\Vendor\ProductVariantItemController;
 use App\Http\Controllers\Vendor\ProfileController;
 use App\Http\Controllers\VendorController;
 use App\Models\SubCategory;
@@ -35,4 +36,20 @@ Route::prefix('vendor')->as('vendor.')
 
         Route::put('products-variants/{products_variant}/status', [ProductVariantController::class, 'changeStatus'])->name('products.variant.status');
         Route::resource('products-variants', ProductVariantController::class);
+
+        Route::get('products/{product}/variants/{variant}/items', [ProductVariantItemController::class, 'index'])
+            ->name('product-variant-item.index');
+        Route::get('products/{product}/variants/{variant}/items/create', [ProductVariantItemController::class, 'create'])
+            ->name('product-variant-item.create');
+        Route::post('products/{product}/variants/{variant}/items', [ProductVariantItemController::class, 'store'])
+            ->name('product-variant-item.store');
+        Route::get('products/{product}/variants/{variant}/items/{item}/edit', [ProductVariantItemController::class, 'edit'])
+            ->name('product-variant-item.edit');
+        Route::put('products/{product}/variants/{variant}/items/{item}', [ProductVariantItemController::class, 'update'])
+            ->name('product-variant-item.update');
+        Route::delete('products/{product}/variants/{variant}/items/{item}', [ProductVariantItemController::class, 'destroy'])
+            ->name('product-variant-item.destroy');
+        Route::put('product/variants/items/{item}/status', [ProductVariantItemController::class, 'changeStatus'])
+            ->name('product-variant-item.status');
+
     });
